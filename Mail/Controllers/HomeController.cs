@@ -1,5 +1,6 @@
 ﻿using Mail.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -29,12 +30,14 @@ namespace Mail.Controllers
         [HttpPost]
         public string Send(MailModel model)
         {
-            string json; ;
+            string json;
             if (ModelState.IsValid)
             {
-                // TODO: хранить id автора в сессии
 
-                User author = ORM.SearchUser(User.Identity.Name);
+                User author = new User();
+                author.Id = Convert.ToInt32(HttpContext.Session.GetString("id"));
+                author.Email = User.Identity.Name;
+
                 User target = ORM.SearchUser(model.Target);
                 
                 if (target == null)

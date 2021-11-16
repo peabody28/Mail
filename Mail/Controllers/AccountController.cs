@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,6 +12,13 @@ namespace Mail.Controllers
 {
     public class AccountController : Controller
     {
+
+        public void CreateSession(User user)
+        {
+            HttpContext.Session.SetString("id", user.Id.ToString());
+        }
+
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -29,7 +36,7 @@ namespace Mail.Controllers
                 if (user != null)
                 {
                     await Authenticate(model.Email); // аутентификация
-
+                    await Task.Run( () => CreateSession(user));
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -61,7 +68,7 @@ namespace Mail.Controllers
                     user.Id = ORM.CreateUser(user);
 
                     await Authenticate(model.Email); // аутентификация
-
+                    await Task.Run(() => CreateSession(user));
                     return RedirectToAction("Index", "Home");
                 }
                 else

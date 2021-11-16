@@ -3,27 +3,48 @@
     ViewData["Title"] = "Home Page";
     Layout = null;
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome @User.Identity.Name</h1>
-    <br />
-    @ViewBag.Error
-    <form asp-action="Send" asp-controller="Home">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="Target">Введите email получателя</label>
-            <input type="text" asp-for="Target" />
-            <span asp-validation-for="Target" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Text">Введите текст</label>
-            <input type="text" asp-for="Text" />
-            <span asp-validation-for="Text" />
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Войти" class="btn btn-outline-dark" />
-        </div>
+<head>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Welcome @User.Identity.Name</h1>
+        <br />
+        <div id='error'></div>
+        <form id='send' method='POST'>
+            <div>
+                <div class="form-group">
+                    <label for="Target">Введите email получателя</label>
+                    <input type="text" name="Target" />
+                </div>
+                <div class="form-group">
+                    <label for="Text">Введите текст</label>
+                    <input type="text" name="Text" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Отправить" class="btn btn-outline-dark" />
+                </div>
+            </div>
+        </form>
     </div>
-</form>
-</div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $('#send').submit(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/Send',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        var resp = JSON.parse(result)
+                        $('#error').html(resp);
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
+</body>
