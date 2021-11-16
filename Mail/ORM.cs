@@ -15,7 +15,7 @@ namespace Mail
             int port = 3306;
             string database = "mail";
             string username = "root";
-            string password = "12345678";
+            string password = "1234";
 
             // Connection String.
             String connString = "Server=" + host + ";Database=" + database
@@ -28,7 +28,7 @@ namespace Mail
             ORM.conn = conn;
         }
 
-        public static User Search(string email)
+        public static User SearchUser(string email)
         {
             MySqlCommand cmd = conn.CreateCommand();
 
@@ -52,10 +52,19 @@ namespace Mail
             return tmp;
         }
 
-        public static Int32 Create(User user)
+        public static Int32 CreateUser(User user)
         {
             MySqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"INSERT INTO users(email, password) VALUES('{user.Email}', '{user.Password}')";
+            int id = cmd.ExecuteNonQuery();
+
+            return id;
+        }
+
+        public static Int32 CreateMail(MailModel model)
+        {
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = $"INSERT INTO mails(author, target, text) VALUES('{model.AuthorId}','{model.TargetId}','{model.Text}')";
             int id = cmd.ExecuteNonQuery();
 
             return id;

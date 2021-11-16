@@ -1,9 +1,29 @@
-﻿
+﻿@model Mail.Models.MailModel
 @{
     ViewData["Title"] = "Home Page";
     Layout = null;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome @User.Identity.Name</h1>
+    <br />
+    @ViewBag.Error
+    <form asp-action="Send" asp-controller="Home">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="form-group">
+            <label asp-for="Target">Введите email получателя</label>
+            <input type="text" asp-for="Target" />
+            <span asp-validation-for="Target" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Text">Введите текст</label>
+            <input type="text" asp-for="Text" />
+            <span asp-validation-for="Text" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Войти" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</form>
 </div>

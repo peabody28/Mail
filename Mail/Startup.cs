@@ -32,6 +32,7 @@ namespace Mail
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
+
             services.AddControllersWithViews();
         }
 

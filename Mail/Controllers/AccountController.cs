@@ -24,7 +24,7 @@ namespace Mail.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = ORM.Search(model.Email);
+                User user = ORM.SearchUser(model.Email);
                 
                 if (user != null)
                 {
@@ -51,14 +51,14 @@ namespace Mail.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = ORM.Search(model.Email);
+                User user = ORM.SearchUser(model.Email);
                 
                 if (user == null)
                 {
                     user = new User();
                     user.Email = model.Email;
                     user.Password = model.Password;
-                    user.Id = ORM.Create(user);
+                    user.Id = ORM.CreateUser(user);
 
                     await Authenticate(model.Email); // аутентификация
 
